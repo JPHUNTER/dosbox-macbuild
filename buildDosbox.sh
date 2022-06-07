@@ -51,8 +51,12 @@ make install
 cd $BUILD_DIR
 
 # Dosbox
-svn checkout svn://svn.code.sf.net/p/dosbox/code-0/dosbox/trunk dosbox-src
+#svn checkout svn://svn.code.sf.net/p/dosbox/code-0/dosbox/trunk dosbox-src
+#cd dosbox-src
+svn checkout https://github.com/JPHUNTER/dosboxrm dosbox-src
 cd dosbox-src
+cd trunk
+cd dosbox-0.74-3
 DOSBOXVERSION=$(svn log | head -2 | awk '/^r/ { print $1 }')
 ./autogen.sh
 eval ./configure --with-sdl-prefix=DEPENDENCIES_DIR $OPTIONS
@@ -61,10 +65,10 @@ mv src/dosbox $BUILD_DIR/dosbox
 cd $BUILD_DIR
 
 # Create App
-curl -Ls -o DOSBox-0.74-1.dmg https://sourceforge.net/projects/dosbox/files/dosbox/0.74/DOSBox-0.74-1_Universal.dmg/download
-hdiutil attach DOSBox-0.74-1.dmg -quiet
-cp -R /Volumes/DOSBox\ 0.74-1/DOSBox.app .
-hdiutil detach /Volumes/DOSBox\ 0.74-1/ -quiet
+curl -Ls -o DOSBox-0.74-3-3.dmg https://sourceforge.net/projects/dosbox/files/dosbox/0.74-3/DOSBox-0.74-3-3.dmg/download
+hdiutil attach DOSBox-0.74-3-3.dmg -quiet
+cp -R /Volumes/DOSBox\ 0.74-3-3/DOSBox.app .
+hdiutil detach /Volumes/DOSBox\ 0.74-3-3/ -quiet
 mv dosbox DOSBox.app/Contents/MacOS/DOSBox
 
 /usr/libexec/PlistBuddy -c "Set :CFBundleGetInfoString ${DOSBOXVERSION}, $COPYRIGHT_TEXT" DOSBox.app/Contents/Info.plist
@@ -77,6 +81,6 @@ rm -rf autoconf-2.69 autoconf-2.69.tar.gz
 rm -rf automake-1.15 automake-1.15.tar.gz
 rm -rf SDL-1.2.15 SDL-1.2.15.tar.gz
 rm -rf dependencies dosbox-src
-rm DOSBox-0.74-1.dmg
+rm DOSBox-0.74-3-3.dmg
 
 echo "Successfully built DOSBox from SVN revision $DOSBOXVERSION $BUILD_DIR/DOSBox.app"
