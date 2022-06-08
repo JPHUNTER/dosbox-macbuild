@@ -16,44 +16,12 @@ fi
 BUILD_DIR=`pwd`/`mktemp -d dosbox-build.XXX`
 COPYRIGHT_TEXT="Copyright 2002-`date +'%Y'` The DOSBox Team, compiled by $USER"
 
-cd $BUILD_DIR
-mkdir dependencies
-
-DEPENDENCIES_DIR=$BUILD_DIR/dependencies
-PATH=$PATH:$DEPENDENCIES_DIR/bin
-
-# Autoconf
-curl -LOs http://ftp.gnu.org/gnu/autoconf/autoconf-2.69.tar.gz
-tar xzpf autoconf-2.69.tar.gz
-cd autoconf-2.69
-./configure --prefix=$DEPENDENCIES_DIR
-make
-make install
-cd $BUILD_DIR
-
-# Automake
-curl -LOs http://ftp.gnu.org/gnu/automake/automake-1.15.tar.gz
-tar xzpf automake-1.15.tar.gz
-cd automake-1.15
-./configure --prefix=$DEPENDENCIES_DIR
-make
-make install
-cd $BUILD_DIR
-
-# SDL
-curl -LOs https://www.libsdl.org/release/SDL-1.2.15.tar.gz
-tar xzpf SDL-1.2.15.tar.gz
-cd SDL-1.2.15
-eval ./configure --prefix=$DEPENDENCIES_DIR --enable-static --disable-shared --disable-video-x11 $OPTIONS
-sed -i "" "/CGDirectPaletteRef palette;/d" src/video/quartz/SDL_QuartzVideo.h
-make
-make install
-cd $BUILD_DIR
-
 # Dosbox
-#svn checkout svn://svn.code.sf.net/p/dosbox/code-0/dosbox/trunk dosbox-src
-#cd dosbox-src
-svn checkout https://github.com/JPHUNTER/dosboxrm dosbox-src
+#backup location
+#svn checkout https://github.com/JPHUNTER/dosboxrm dosbox-src
+#live dev location
+svn checkout https://github.com/jrdennisoss/dosboxrm dosbox-src
+brew install autoconf automake libtool sdl
 cd dosbox-src
 cd trunk
 cd dosbox-0.74-3
@@ -77,10 +45,7 @@ mv dosbox DOSBox.app/Contents/MacOS/DOSBox
 /usr/libexec/PlistBuddy -c "Set :NSHumanReadableCopyright $COPYRIGHT_TEXT" DOSBox.app/Contents/Info.plist
 
 # Cleanup
-rm -rf autoconf-2.69 autoconf-2.69.tar.gz
-rm -rf automake-1.15 automake-1.15.tar.gz
-rm -rf SDL-1.2.15 SDL-1.2.15.tar.gz
-rm -rf dependencies dosbox-src
+rm -rf dosbox-src
 rm DOSBox-0.74-3-3.dmg
 
 echo "Successfully built DOSBox from SVN revision $DOSBOXVERSION $BUILD_DIR/DOSBox.app"
