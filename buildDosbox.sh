@@ -21,7 +21,7 @@ COPYRIGHT_TEXT="Copyright 2002-`date +'%Y'` The DOSBox Team, compiled by $USER"
 #svn checkout https://github.com/JPHUNTER/dosboxrm dosbox-src
 #live dev location
 svn checkout https://github.com/jrdennisoss/dosboxrm dosbox-src
-brew install autoconf automake libtool sdl
+brew install autoconf automake libtool sdl12-compat
 cd dosbox-src
 cd trunk
 cd dosbox-0.74-3
